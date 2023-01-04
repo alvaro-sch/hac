@@ -1,0 +1,11 @@
+[package]
+name = "hac"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/alvaro-sch/hac"
+keywords = ["hpc", "gpgpu", "heterogeneous computing"]
+authors = ["Alvaro <alvarolegit@gmail.com>"]
+description = "Compute API for portable high performance computing with the GPU."
+
+[dependencies]
