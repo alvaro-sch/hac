@@ -61,7 +61,7 @@ impl<'a> CommandQueue<'a> {
     /// # Note
     ///
     /// To be able to use push constants the `PUSH_CONSTANTS` feature must be enabled
-    /// along with setting the correct limits in [`ContextInfo`]. The program will panic
+    /// along with setting the correct limits in [`crate::ContextInfo`]. The program will panic
     /// otherwise when executing the queue.
     pub fn enqueue_set_push_constants(mut self, offset: u32, data: &'a [u8]) -> Self {
         self.cmd_queue
@@ -91,7 +91,7 @@ impl<'a> CommandQueue<'a> {
     /// # Note
     ///
     /// Each dimension must not exceed the limit size `max_compute_workgroups_per_dimension`
-    /// with a default value of 65535 that can be configured in `ContextInfo`.
+    /// with a default value of 65535 that can be configured in [`crate::ContextInfo`].
     pub fn enqueue_dispatch(mut self, workgroups: Range) -> Self {
         self.cmd_queue.push_back(Command::Dispatch { workgroups });
         self
@@ -104,7 +104,7 @@ impl<'a> CommandQueue<'a> {
     /// - if `Command::Dispatch` was enqueued before setting a kernel.
     /// - if `Command::SetPushConstants` was enqueued before setting a kernel.
     /// - if `Command::SetPushConstants` is used without enabling the `PUSH_CONSTANTS` feature
-    /// or exceeds the maximum set limit specified in [`ContextInfo`].
+    /// or exceeds the maximum set limit specified in [`crate::ContextInfo`].
     /// - if `Command::SetPushConstants` is used twice for the same Kernel.
     /// - if `Command::SetBindGroup` is bound at an index which is supposed to have a bind group
     /// with a different layout.

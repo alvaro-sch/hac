@@ -4,6 +4,7 @@ version = "0.1.1"
 edition = "2021"
 license = "MIT"
 repository = "https://github.com/alvaro-sch/hac"
+documentation = "https://docs.rs/hac/"
 keywords = ["hpc", "gpgpu"]
 authors = ["Alvaro <alvarolegit@gmail.com>"]
 description = "Hardware Accelerated Computing API for portable high performace computing with the GPU."

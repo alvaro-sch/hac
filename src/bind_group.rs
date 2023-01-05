@@ -268,7 +268,7 @@ impl<'a> BindGroupDescriptor<'a> {
 
 /// Hold the data necesary to set bind groups (a.k.a. descriptor sets) in the Kernel.
 ///
-/// bind groups are created from [`BindGroupLayout`]s.
+/// bind groups are created from [`BindGroupDescriptor`]s.
 #[derive(Debug)]
 pub struct BindGroup {
     pub(crate) layout: wgpu::BindGroupLayout,
