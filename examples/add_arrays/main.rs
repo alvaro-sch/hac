@@ -1,30 +1,3 @@
-# HAC
-
-Hardware Accelerated Computing API via the GPU, built on top of [wgpu](wgpu.rs/)
-for achieving great portability.
-
-## Stability
-
-This crate works pretty fine for various simple use-cases (see examples), but it exposes
-lots of wgpu functionality that hasn't been tested and may possibly not even work, use
-those features at your own risk.
-
-## TODO
-
-- Figure out an elegant way to reuse wgpu's BindGroupLayouts
-- Generalize the use case for swapping the same 2 images
-- Improve the `CommandQueue`
-- Explore and add more features for Images
-
-## Cargo features
-
-- `from_image`: allows the creation of `Image`s using the
-[image](https://docs.rs/image/latest/image/) crate
-(currently supports rgba8 only).
-
-## Example: Add arrays
-
-```rust
 use rand::Rng;
 
 // wgpu's default `max_workgroups_per_dimension`
@@ -51,7 +24,6 @@ fn main(input: ComputeInput) {
     c[i] = a[i] + b[i];
 }"#;
 
-
 fn main() {
     let context = hac::Context::new(&hac::ContextInfo::default());
 
@@ -63,14 +35,14 @@ fn main() {
     let mut b = vec![0.0f32; N];
     rng.fill(&mut b[..]);
 
-    let buf_a = context.buffer_from_slice(&a);    // input
-    let buf_b = context.buffer_from_slice(&b);    // input
-    let buf_c = context.buffer::<f32>(N as u64);  // output
+    let buf_a = context.buffer_from_slice(&a); // input
+    let buf_b = context.buffer_from_slice(&b); // input
+    let buf_c = context.buffer::<f32>(N as u64); // output
 
     let bind_group = context
         .bind_group_descriptor()
-        .push_buffer(&buf_a, hac::BufferAccess::ReadOnly)  // @binding(0)
-        .push_buffer(&buf_b, hac::BufferAccess::ReadOnly)  // @binding(1)
+        .push_buffer(&buf_a, hac::BufferAccess::ReadOnly) // @binding(0)
+        .push_buffer(&buf_b, hac::BufferAccess::ReadOnly) // @binding(1)
         .push_buffer(&buf_c, hac::BufferAccess::ReadWrite) // @binding(2)
         .into_bind_group();
 
@@ -80,8 +52,8 @@ fn main() {
         program: &program,
         entry_point: "main",
         bind_groups: &[&bind_group], // each index corresponds to the group
-                                     // each binding of `bind_group` is in @group(0)
-        push_constants_range: None,  // requires the `PUSH_CONSTANTS` feature
+        // each binding of `bind_group` is in @group(0)
+        push_constants_range: None, // requires the `PUSH_CONSTANTS` feature
     });
 
     kernel.dispatch(hac::Range::d1(N as u32));
@@ -92,4 +64,3 @@ fn main() {
     (0..N).for_each(|i| assert!((a[i] + b[i] - c[i]).abs() <= f32::EPSILON));
     (0..8).for_each(|i| println!("{:<11} + {:<11} = {}", a[i], b[i], c[i]));
 }
-```
