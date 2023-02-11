@@ -34,7 +34,7 @@
 //!
 //!
 //! fn main() {
-//!     let context = hac::Context::new(&hac::ContextInfo::default());
+//!     let context = hac::Context::default();
 //!
 //!     let mut rng = rand::thread_rng();
 //!

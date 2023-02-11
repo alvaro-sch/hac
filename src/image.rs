@@ -89,6 +89,7 @@ impl Image {
                 format: info.format,
                 size: info.size,
                 dimension,
+                view_formats: &[],
             });
 
         let view = texture.create_view(&wgpu::TextureViewDescriptor::default());
@@ -123,6 +124,7 @@ impl Image {
                 dimension,
                 format,
                 size,
+                view_formats: &[],
             });
 
         let view = texture.create_view(&wgpu::TextureViewDescriptor::default());

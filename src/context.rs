@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use bytemuck::Pod;
 use pollster::FutureExt as _;
-pub use wgpu::{Backends, Features, Limits};
+pub use wgpu::{Backends, Dx12Compiler, Features, Limits};
 
 use crate::{
     BindGroupDescriptor, Buffer, CommandQueue, Image, ImageInfo, Kernel, KernelInfo, Program,
@@ -10,11 +10,12 @@ use crate::{
 };
 
 /// Information to create a context.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone)]
 pub struct ContextInfo {
     pub backends: Backends,
     pub features: Features,
     pub limits: Limits,
+    pub dx12_shader_compiler: Dx12Compiler,
 }
 
 impl Default for ContextInfo {
@@ -23,6 +24,7 @@ impl Default for ContextInfo {
             backends: Backends::all(),
             features: Features::empty(),
             limits: Limits::default(),
+            dx12_shader_compiler: Dx12Compiler::default(),
         }
     }
 }
@@ -35,8 +37,11 @@ pub struct Context {
 
 impl Context {
     /// Creates a context.
-    pub fn new(info: &ContextInfo) -> Self {
-        let instance = wgpu::Instance::new(info.backends);
+    pub fn new(info: ContextInfo) -> Self {
+        let instance = wgpu::Instance::new(wgpu::InstanceDescriptor {
+            backends: info.backends,
+            dx12_shader_compiler: info.dx12_shader_compiler,
+        });
 
         let adapter = instance
             .request_adapter(&wgpu::RequestAdapterOptions::default())
@@ -141,5 +146,11 @@ impl Context {
         sample_type: crate::ImageSampleType,
     ) -> Image {
         Image::from_rgba8_image(self, image, sample_type)
+    }
+}
+
+impl Default for Context {
+    fn default() -> Self {
+        Self::new(ContextInfo::default())
     }
 }
