@@ -243,8 +243,10 @@ impl Image {
     pub fn dimension(&self) -> ImageDimension {
         self.dimension
     }
+}
 
-    #[cfg(feature = "from_image")]
+#[cfg(feature = "from_image")]
+impl Image {
     /// Creates an image from an Rgba8 image buffer.
     ///
     /// The `sample_type` parameter is used to choose the correct image format.
@@ -274,6 +276,7 @@ impl Image {
             .create_texture(&wgpu::TextureDescriptor {
                 label: Some("texture"),
                 usage: Self::USAGES,
+                view_formats: &[],
                 mip_level_count: 1,
                 sample_count: 1,
                 dimension,
